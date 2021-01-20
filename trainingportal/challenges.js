@@ -33,6 +33,9 @@ var descriptions = [];
 var masterSalt = "";
 var adminFlag;
 
+var myControlFile = require('./controlFile.json')
+console.log(myControlFile.blockedSolutions[0])
+
 
 loadModules = function(){ 
     let modsPath;
@@ -224,7 +227,12 @@ exports.getSolution = function (challengeId) {
         var solution = solutions[challengeId];
     }
     else {
-        var solution = "nosol.sol.md"
+        if(myControlFile.blockedSolutions.includes(challengeId)){
+            var solution = "nosol.sol.md"
+        }
+	else{
+            var solution = solutions[challengeId];
+        }
     }
     var solutionHtml = "";
     if(!util.isNullOrUndefined(solution)){

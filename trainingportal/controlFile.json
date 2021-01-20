@@ -3,5 +3,8 @@
 		"tarek",
 		"zain",
 		"adminTest"
+	],
+	"blockedSolutions": [
+		"cwe306"
 	]
 }
