@@ -22,7 +22,7 @@ var af = 0;
 //var adminFlag = af;
 
 
-var myControlFile = require('./controlFile.json')
+//var myControlFile = require('./controlFile.json')
 //var numberOfAdminUsers = myControlFile.adminUsers.length;
 //console.log(numberOfAdminUsers)
 //console.log(myControlFile.adminUsers[0]);
@@ -216,6 +216,9 @@ exports.verifyLocalUserPassword = function(username,password){
         var passwordHash = util.hashPassword(password,saltString);
         if(user.passHash === passwordHash){
             //Checking if user is admin and setting flag
+            //var myControlFile = require('./controlFile.json')
+            var myControlFileRaw = fs.readFileSync('./controlFile.json',{encoding:'utf8', flag:'r'});
+            var myControlFile = JSON.parse(myControlFileRaw);
             if(myControlFile.adminUsers.includes(username)){
                 af = 1;
                 exports.adminFlag = af;
@@ -334,6 +337,12 @@ processAuthCallback = function (profileId, givenName, familyName, email, cb) {
             //on success retrive the user record to store it into the session
             db.getUser(profileId, null, (user) => {
                 util.log("New user created.", user);
+		if(af){
+            	    util.log("User is an admin.", user);
+	        }
+	    else{
+                util.log("User is not an admin.", user);
+	    }
                 user.email = email;
                 if(cb) return cb(null, user);
             });

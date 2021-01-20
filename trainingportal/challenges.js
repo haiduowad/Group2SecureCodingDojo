@@ -33,8 +33,7 @@ var descriptions = [];
 var masterSalt = "";
 var adminFlag;
 
-var myControlFile = require('./controlFile.json')
-console.log(myControlFile.blockedSolutions[0])
+//var myControlFile = require('./controlFile.json')
 
 
 loadModules = function(){ 
@@ -222,7 +221,9 @@ exports.getChallengeDefinitionsForUser = async (user, moduleId) => {
  * @param {The challenge id} challengeId 
  */
 exports.getSolution = function (challengeId) {
-    //console.log("Admin Flag in get solution: ", adminFlag)
+    //var myControlFile = require('./controlFile.json')
+    var myControlFileRaw = fs.readFileSync('./controlFile.json',{encoding:'utf8', flag:'r'});
+    var myControlFile = JSON.parse(myControlFileRaw);
     if (adminFlag) {
         var solution = solutions[challengeId];
     }
