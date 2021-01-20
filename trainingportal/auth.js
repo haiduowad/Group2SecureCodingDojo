@@ -13,6 +13,20 @@ const challenges = require(path.join(__dirname, 'challenges'));
 const captchapng = require('captchapng');
 const fs = require('fs');
 
+//To view the solution, set flag to 1, otherwise to 0.
+
+var af = 0;
+// do check here
+//if true set flag (af = x);
+//exports.adminFlag = af;
+//var adminFlag = af;
+
+
+var myControlFile = require('./controlFile.json')
+//var numberOfAdminUsers = myControlFile.adminUsers.length;
+//console.log(numberOfAdminUsers)
+//console.log(myControlFile.adminUsers[0]);
+//console.log(myControlFile.adminUsers[1]);
 
 
 
@@ -201,6 +215,15 @@ exports.verifyLocalUserPassword = function(username,password){
 
         var passwordHash = util.hashPassword(password,saltString);
         if(user.passHash === passwordHash){
+            //Checking if user is admin and setting flag
+            if(myControlFile.adminUsers.includes(username)){
+                af = 1;
+                exports.adminFlag = af;
+            }
+            else{
+                af = 0;
+                exports.adminFlag = af;
+            }
             return user;
         }
         else{
@@ -213,6 +236,7 @@ exports.verifyLocalUserPassword = function(username,password){
 
    return null;
 }
+
 
 exports.updateLocalUser = function(req,res){
     //check if local auth is enabled
@@ -280,6 +304,12 @@ processAuthCallback = function (profileId, givenName, familyName, email, cb) {
     if(user){
         //the user exists return this user
         util.log("User logged in.", user);
+	if(af){
+            util.log("User is an admin.", user);
+	}
+	else{
+            util.log("User is not an admin.", user);
+	}
         user.email = email;
         let modules = challenges.getModules();
         for(let moduleId in modules){

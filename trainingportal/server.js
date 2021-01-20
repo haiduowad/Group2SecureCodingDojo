@@ -30,8 +30,10 @@ const auth = require(path.join(__dirname, 'auth'));
 const util = require(path.join(__dirname, 'util'));
 var config = util.getConfig();
 const challenges = require(path.join(__dirname, 'challenges'));
+//challenges.setAdminFlag(auth.adminFlag);
 const report = require(path.join(__dirname, 'report'));
 var mainHtml = fs.readFileSync(path.join(__dirname, 'static/main.html'),'utf8');
+//console.log(auth)
 
 
 //INIT
@@ -183,7 +185,10 @@ app.get('/logout', auth.logout);
 app.get('/main', (req, res) => {
   let updatedHtml = auth.addCsrfToken(req, mainHtml);
   res.send(updatedHtml);
+  challenges.setAdminFlag(auth.adminFlag);
 });
+
+
 
 
 app.get('/challenges/:moduleId', async (req, res) => {

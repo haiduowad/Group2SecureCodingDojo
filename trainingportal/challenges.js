@@ -31,6 +31,8 @@ var challengeNames = [];
 var solutions = [];
 var descriptions = [];
 var masterSalt = "";
+var adminFlag;
+
 
 loadModules = function(){ 
     let modsPath;
@@ -98,6 +100,7 @@ init();
 exports.getModules = function(){ return modules; }
 exports.getChallengeNames = function(){ return challengeNames; }
 exports.getChallengeDefinitions = function(){ return challengeDefinitions; }
+exports.setAdminFlag = function (af) { adminFlag = af; }
 
 exports.isPermittedModule = async (user, moduleId) => {
     let badges = await db.fetchBadges(user.id);
@@ -216,7 +219,13 @@ exports.getChallengeDefinitionsForUser = async (user, moduleId) => {
  * @param {The challenge id} challengeId 
  */
 exports.getSolution = function (challengeId) {
-    var solution = solutions[challengeId];
+    //console.log("Admin Flag in get solution: ", adminFlag)
+    if (adminFlag) {
+        var solution = solutions[challengeId];
+    }
+    else {
+        var solution = "nosol.sol.md"
+    }
     var solutionHtml = "";
     if(!util.isNullOrUndefined(solution)){
         var solutionMarkDown = fs.readFileSync(path.join(__dirname, solution),'utf8');
