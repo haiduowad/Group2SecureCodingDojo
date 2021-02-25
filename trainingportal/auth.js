@@ -39,6 +39,8 @@ if(!util.isNullOrUndefined(config.encSamlProviderPvkFilePath)){
 } 
 
 
+
+
 var localUsers = null;
 var localUsersPath = "";
 try{
@@ -54,6 +56,27 @@ try{
     localUsers = require(localUsersPath);
   }
 }
+
+catch(ex){
+    util.log(ex);
+}
+
+var myControlFileRaw  = null;
+var myControlFileRawPath = "";
+try{
+  if(!util.isNullOrUndefined(config.myControlFileRawPath))
+  {
+    let dataDir = util.getDataDir();
+    myControlFileRawPath = path.join(dataDir, config.myControlFileRaw);
+    
+    if(!fs.existsSync(myControlFileRawPath)){
+        //create the users file if not already there
+        fs.writeFileSync(myControlFileRawPath, "{}", 'utf8');
+    }
+    //myControlFileRaw = require(myControlFileRawPath);
+  }
+}
+
 catch(ex){
     util.log(ex);
 }
@@ -209,6 +232,10 @@ exports.verifyLocalUserPassword = function(username,password){
         return null;
    } 
 
+
+
+
+
    if(username in localUsers){
         var user = localUsers[username];
         var saltString =user.passSalt ;
@@ -217,9 +244,16 @@ exports.verifyLocalUserPassword = function(username,password){
         if(user.passHash === passwordHash){
             //Checking if user is admin and setting flag
             //var myControlFile = require('./controlFile.json')
-            var myControlFileRaw = fs.readFileSync('./controlFile.json',{encoding:'utf8', flag:'r'});
+            //var myControlFileRaw = fs.readFileSync('./controlFile.json',{encoding:'utf8', flag:'r'});
+	    //var myControlFileRaw = fs.readFileSync(myControlFileRawPath,{encoding:'utf8', flag:'r'});
+	    let dataDir = util.getDataDir();
+	    myControlFileRawPath = path.join(dataDir, config.myControlFileRawPath);
+
+	    myControlFileRaw = fs.readFileSync(myControlFileRawPath,'utf8');
+	    //myControlFileRaw = require(myControlFileRawPath);
             var myControlFile = JSON.parse(myControlFileRaw);
             if(myControlFile.adminUsers.includes(username)){
+	    //if(myControlFileRaw.adminUsers.includes(username)){
                 af = 1;
                 exports.adminFlag = af;
             }

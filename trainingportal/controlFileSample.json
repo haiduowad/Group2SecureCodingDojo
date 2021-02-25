@@ -2,7 +2,10 @@
 	"adminUsers": [
 		"tarek",
 		"zain",
-		"adminTest"
+		"adminTest",
+		"rishavjeet",
+		"limiteduserr"
+
 	],
 	"blockedSolutions": [
 		"cwe306"

@@ -222,7 +222,10 @@ exports.getChallengeDefinitionsForUser = async (user, moduleId) => {
  */
 exports.getSolution = function (challengeId) {
     //var myControlFile = require('./controlFile.json')
-    var myControlFileRaw = fs.readFileSync('./controlFile.json',{encoding:'utf8', flag:'r'});
+    //var myControlFileRaw = fs.readFileSync('./controlFile.json',{encoding:'utf8', flag:'r'});
+    let dataDir = util.getDataDir();
+    myControlFileRawPath = path.join(dataDir, config.myControlFileRawPath);
+    myControlFileRaw = fs.readFileSync(myControlFileRawPath,'utf8');
     var myControlFile = JSON.parse(myControlFileRaw);
     if (adminFlag) {
         var solution = solutions[challengeId];

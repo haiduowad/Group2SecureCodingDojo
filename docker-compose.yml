@@ -11,11 +11,11 @@ services:
        - CHALLENGE_MASTER_SALT
 
   trainingportal:
-    image: securecodingdojo/trainingportal
+    image: trainingportaltest
     ports:
       - "8081:8081"
     volumes:
-       - "${DATA_DIR}:/dojofiles:consistent"
+       - "${DATA_DIR}/:/dojofiles:consistent"
     networks:
        - portal
     environment:
